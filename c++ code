@@ -1,0 +1,113 @@
+
+// here sorce is not (0,0) and destination is not (n-1),(n-1)
+// any index from 1st row is source and any index from last row is destination .
+
+
+
+
+
+//memoization method 
+
+
+class Solution{
+public:
+
+
+int solve(vector<vector<int>> &arr , vector<vector<int>> &dp , int i ,int j,int size) {
+ 
+  // boundation condition
+  if(j<0 || j>=size)return INT_MIN;
+  
+  // base condition 
+  if(i==0)return arr[i][j];
+  
+  // dp checking
+  if(dp[i][j]!=-1)return dp[i][j];
+  
+  // recursive call
+  
+ int top=arr[i][j] + solve(arr,dp,i-1,j,size);
+ int ld=arr[i][j] + solve(arr,dp,i-1,j-1,size);
+ int rd=arr[i][j] + solve(arr,dp,i-1,j+1,size);
+ 
+return dp[i][j]=max(top,max(ld,rd));    
+    
+}
+
+
+
+int maximumPath(int n, vector<vector<int>> arr){
+      
+      vector<vector<int>>dp(n,vector<int>(n,-1));
+      
+      int ans_max=0;
+      
+      for(int j=0;j<n;j++)
+        ans_max = max (ans_max , solve(arr,dp,n-1,j,n));
+        
+    return ans_max;
+ 
+    }
+};
+
+
+
+
+
+
+
+
+
+// tabulation
+
+
+class Solution{
+public:
+
+int maximumPath(int n, vector<vector<int>> arr){
+      
+      vector<vector<int>>dp(n,vector<int>(n,-1));
+      
+    int ans_max=0;
+    
+    
+  // firstly intialize all last colomn for their arr value   
+  for(int j=0;j<n;j++)
+     dp[n-1][j]=arr[n-1][j];
+    
+// find max sum from bottom to top and fill 2D matrix 
+ for(int i=n-2;i>=0;i--){
+     for(int j=n-1;j>=0;j--){
+         
+   int up =INT_MIN;
+   int ul =INT_MIN;
+   int ur =INT_MIN;
+   
+   up=dp[i+1][j]+arr[i][j];
+   if(j+1<n)
+   ul=dp[i+1][j+1]+arr[i][j];
+   if(j-1>=0)
+   ur=dp[i+1][j-1]+arr[i][j];
+   
+   
+  dp[i][j]=max(up,max(ul,ur));
+    }
+ }
+    
+    
+
+// return the maximum sum it means check the max value from first row
+// which array the our max possible value because .
+
+for(int i=0;i<n;i++){
+    ans_max=max(ans_max,dp[0][i]);
+}
+
+
+return ans_max;
+ 
+ 
+    }
+};
+
+
